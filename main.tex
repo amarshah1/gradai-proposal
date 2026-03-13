@@ -9,7 +9,7 @@
 
 \geometry{margin=1in}
 
-\title{\textbf{GradAI Project Proposal}}
+\title{\textbf{Grad AI Project Proposal}}
 \author{Elanor Tang and Amar Shah}
 \date{\today}
 
@@ -17,48 +17,47 @@
 
 \maketitle
 
-\section{Introduction}
+\section{Background}
 
-For our project, we propose to use formal verification to understand and improve
+We propose to use formal verification to understand and improve
 modern AI systems. Specifically, we will look at the state-of-the-art Rust
 verifier Verus~\cite{Verus}, which has already been used in projects at the
 intersection of AI and verification
-\cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. We will outline two
-potential projects here.
+\cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
 
-\section{Background}
+todo: define Verification, Rust, Verus, reward hacking, and talk about PSV \cite{PSV}. (amar)
 
-todo: define Verification, Rust, Verus, and weakest precondition. (amar)
-
-\section{Potential Projects}
-
-% There are two potential projects we are considering:
-
+\section{Proposal}
+Our project aims to address the following question: 
+\textbf{Are formal specifications less susceptible to reward hacking 
+compared to unit tests?} Our experimental set-up is as follows:
 \begin{enumerate}
-    % \item \textbf{Can LLMs understand weakest precondition?}. Prior work has
-    % been immensely successful for getting LLMs to generate verified code in
-    % Verus. The idea behind this project is to examine if LLMs understand the
-    % proofs that they are writing. We aim to do this by seeing if there is a
-    % correlation between generating weakest preconditions and generating verified
-    % code. This project requires three stages:
-    % \begin{itemize}
-    %     \item Adding support to generate weakest precondition into the Verus
-    %     codebase.
-    %     \item Measuring different models and code-generation pipelines to see if
-    %     there is a correlation between their ability to generate weakest
-    %     preconditions and their ability to generate verified code.
-    %     \item \textbf{Stretch Goal:} Finetune a model on generating weakest
-    %     preconditions. Measure if this can help a model generate better verified
-    %     code. A positive correlation could indicated something about what the
-    %     model understands about the code.
-    % \end{itemize}
-    \item \textbf{For RL self-play: Are formal specifications less susceptible
-    to reward hacking compared to unit tests?}
+    \item We start with a benchmark of coding problems 
+    defined by both natural language and formal Verus specifications. 
+    We consider these formal Verus specifications to be the ``gold-standard" 
+    which ultimately defines the coding problem.
+    \item We provide a model with just the natural language specifications, 
+    and ask it to generate 
+    (A) unit tests to check if an implementation satisfies the specification and 
+    (B) a formal Verus specification. 
+    Note that this generated spec may differ from the original gold-standard spec.
+    \item For both (A) and (B), we train a model via RL to produce code satisfying
+    the natural language specification, 
+    where the reward mechanism is either passing all the unit tests 
+    or satisfying the generated Verus specification, as checked by Verus.
+    \item We evaluate the two models by checking if the code produced also satisfies
+    the gold-standard spec. 
+    If it does not, we interpret this to mean that the model successfully ``hacked''
+    the reward mechanism. 
+    We hypothesize that we will see more cases 
+    when the produced code passes the unit tests but does not satisfy the gold-standard spec,
+    compared to using generated specs as the reward mechanism.
 \end{enumerate}
-
--hypothesis (elanor)
-
--experiment (elanor)
+Note: it's possible that the code produced by the models does satisfy the gold-standard specification, 
+    but Verus rejects it due to insufficient proof annotations. 
+    If we find this to be the case, 
+    we would add a step between (3) and (4) which asks a model to add only proof annotations to the produced code,
+    to help Verus see that the implementation does satisfy the specification.
 
 -benchmarks (Amar)
     - human eval
