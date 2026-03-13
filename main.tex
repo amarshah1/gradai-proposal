@@ -28,33 +28,46 @@ potential projects here.
 
 \section{Background}
 
-todo: define Verification, Rust, Verus, and weakest precondition.
+todo: define Verification, Rust, Verus, and weakest precondition. (amar)
 
 \section{Potential Projects}
 
-There are two potential projects we are considering:
+% There are two potential projects we are considering:
 
 \begin{enumerate}
-    \item \textbf{Can LLMs understand weakest precondition?}. Prior work has
-    been immensely successful for getting LLMs to generate verified code in
-    Verus. The idea behind this project is to examine if LLMs understand the
-    proofs that they are writing. We aim to do this by seeing if there is a
-    correlation between generating weakest preconditions and generating verified
-    code. This project requires three stages:
-    \begin{itemize}
-        \item Adding support to generate weakest precondition into the Verus
-        codebase.
-        \item Measuring different models and code-generation pipelines to see if
-        there is a correlation between their ability to generate weakest
-        preconditions and their ability to generate verified code.
-        \item \textbf{Stretch Goal:} Finetune a model on generating weakest
-        preconditions. Measure if this can help a model generate better verified
-        code. A positive correlation could indicated something about what the
-        model understands about the code.
-    \end{itemize}
+    % \item \textbf{Can LLMs understand weakest precondition?}. Prior work has
+    % been immensely successful for getting LLMs to generate verified code in
+    % Verus. The idea behind this project is to examine if LLMs understand the
+    % proofs that they are writing. We aim to do this by seeing if there is a
+    % correlation between generating weakest preconditions and generating verified
+    % code. This project requires three stages:
+    % \begin{itemize}
+    %     \item Adding support to generate weakest precondition into the Verus
+    %     codebase.
+    %     \item Measuring different models and code-generation pipelines to see if
+    %     there is a correlation between their ability to generate weakest
+    %     preconditions and their ability to generate verified code.
+    %     \item \textbf{Stretch Goal:} Finetune a model on generating weakest
+    %     preconditions. Measure if this can help a model generate better verified
+    %     code. A positive correlation could indicated something about what the
+    %     model understands about the code.
+    % \end{itemize}
     \item \textbf{For RL self-play: Are formal specifications less susceptible
     to reward hacking compared to unit tests?}
 \end{enumerate}
+
+-hypothesis (elanor)
+
+-experiment (elanor)
+
+-benchmarks (Amar)
+    - human eval
+
+-confouding factors (Amar)
+    - bad coverage by unit tests
+    - specifications are an under-approximation
+    - data contamination
+    - models are maybe worse at generating specification (maybe this is something we want to measure)
 
 \bibliographystyle{plain}
 \bibliography{references}
