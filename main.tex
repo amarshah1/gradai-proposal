@@ -19,14 +19,44 @@
 
 \section{Introduction}
 
-For our project, we propose to use formal verification to examine
-and understand modern AI systems. Specifically, we will look at the 
-Rust verifier Verus, which has already been used in AI-verification 
-projects (todo: cite). We will outline two potential projects here.
+For our project, we propose to use formal verification to understand and improve
+modern AI systems. Specifically, we will look at the state-of-the-art Rust
+verifier Verus~\cite{Verus}, which has already been used in projects at the
+intersection of AI and verification
+\cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. We will outline two
+potential projects here.
 
 \section{Background}
 
+todo: define Verification, Rust, Verus, and weakest precondition.
+
 \section{Potential Projects}
 
+There are two potential projects we are considering:
 
+\begin{enumerate}
+    \item \textbf{Can LLMs understand weakest precondition?}. Prior work has
+    been immensely successful for getting LLMs to generate verified code in
+    Verus. The idea behind this project is to examine if LLMs understand the
+    proofs that they are writing. We aim to do this by seeing if there is a
+    correlation between generating weakest preconditions and generating verified
+    code. This project requires three stages:
+    \begin{itemize}
+        \item Adding support to generate weakest precondition into the Verus
+        codebase.
+        \item Measuring different models and code-generation pipelines to see if
+        there is a correlation between their ability to generate weakest
+        preconditions and their ability to generate verified code.
+        \item \textbf{Stretch Goal:} Finetune a model on generating weakest
+        preconditions. Measure if this can help a model generate better verified
+        code. A positive correlation could indicated something about what the
+        model understands about the code.
+    \end{itemize}
+    \item \textbf{For RL self-play: Are formal specifications less susceptible
+    to reward hacking compared to unit tests?}
+\end{enumerate}
+
+\bibliographystyle{plain}
+\bibliography{references}
+1
 \end{document}
