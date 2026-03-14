@@ -6,6 +6,8 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{parskip}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
 
 \geometry{margin=1in}
 
@@ -19,18 +21,34 @@
 
 \section{Background}
 
-We propose to use formal verification to understand and improve
-modern AI systems. Specifically, we will look at the state-of-the-art Rust
-verifier Verus~\cite{Verus}, which has already been used in projects at the
-intersection of AI and verification
-\cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
+Our project aims to address the following question: \textbf{Are formal
+specifications less susceptible to reward hacking compared to unit tests?}.
+Specifically, we will look at the state-of-the-art Rust verifier
+Verus~\cite{Verus}, which has already been used in projects at the intersection
+of AI and verification \cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
 
-todo: define Verification, Rust, Verus, reward hacking, and talk about PSV \cite{PSV}. (amar)
+\textbf{Formal Verification.}
+Formal verification is the process of mathematically proving that a program satisfies a precise logical specification.
+Unlike testing, which checks correctness on a finite set of inputs, formal verification provides guarantees over all possible inputs and program behaviors.
+% Rust is a systems programming language designed for memory safety and performance; its strong ownership type system eliminates entire classes of bugs (e.g., null-pointer dereferences, data races) at compile time, making it a natural fit for safety-critical software.
+
+\textbf{Verus.}
+Verus~\cite{Verus} is a deductive verifier for Rust that allows programmers to annotate their code with logical pre- and post-conditions, loop invariants, and other proof obligations.
+Because Verus specifications are checkable and compositional, they serve as unambiguous descriptions of program intent---beyond what unit tests can capture.
+
+\textbf{Reward Hacking.}
+Reward hacking occurs when a model trained via reinforcement learning (RL) discovers behaviors that achieve high ``reward'' without actually satisfying the underlying intent of the task~\cite{RewardHacking}.
+In code generation, a common form of reward hacking is overfitting to a test suite: the model learns to produce code that passes the provided tests while failing on edge cases not covered by those tests.
+% Replacing hand-written or model-generated unit tests with formal specifications as the reward signal is a natural candidate for mitigating this failure mode, since a formal specification can capture the full intended semantics of a function.
+
+\textbf{Propose-Solve-Verify.}
+Our work will build upon Propose, Solve, Verify (PSV)~\cite{PSV}, which frames program synthesis as a self-play game over formal verification.
+In PSV, one model \emph{proposes} a problem (i.e., a Verus specification), a second model \emph{solves} it by producing a Rust implementation, and the Verus verifier acts as an objective judge to \emph{verify} whether the solution is correct.
+This setup enables scalable self-play without human-labeled correctness signals.
+Our project aims to understand one of the hypotheses of this work: whether formal specifications are more robust reward signals than unit tests for RL-based code generation.
 
 \section{Proposal}
-Our project aims to address the following question: 
-\textbf{Are formal specifications less susceptible to reward hacking 
-compared to unit tests?} Our experimental set-up is as follows:
+ Our experimental set-up is as follows:
 \begin{enumerate}
     \item We start with a benchmark of coding problems 
     defined by both natural language and formal Verus specifications. 
@@ -53,20 +71,94 @@ compared to unit tests?} Our experimental set-up is as follows:
     when the produced code passes the unit tests but does not satisfy the gold-standard spec,
     compared to using generated specs as the reward mechanism.
 \end{enumerate}
-Note: it's possible that the code produced by the models does satisfy the gold-standard specification, 
+\begin{figure}[h]
+\centering
+\tikzset{
+  box/.style={rectangle, rounded corners=3pt, draw, align=center,
+              minimum width=2.6cm, minimum height=0.75cm, font=\small},
+  goldbox/.style={box, fill=yellow!20, draw=orange!70},
+  genbox/.style={box, fill=blue!10, draw=blue!50},
+  rlbox/.style={box, fill=green!10, draw=green!60!black},
+  evalbox/.style={box, fill=red!10, draw=red!50},
+  arr/.style={-{Stealth[length=5pt]}, thick},
+}
+\begin{tikzpicture}[node distance=0.55cm and 1.5cm]
+
+  % Top: benchmark input
+  \node[goldbox, minimum width=4cm] (bench)
+    {Benchmark\\{\footnotesize NL spec + gold Verus spec}};
+
+  % NL spec fed to generator
+  \node[genbox, below=of bench] (gen)
+    {LLM Generator\\{\footnotesize (given NL spec only)}};
+  \draw[arr] (bench) -- node[right, font=\scriptsize]{NL spec} (gen);
+
+  % Two branches
+  \node[genbox, below left=1.0cm and 1.8cm of gen]  (tests)
+    {(A) Unit Tests};
+  \node[genbox, below right=1.0cm and 1.8cm of gen] (spec)
+    {(B) Verus Spec\\{\footnotesize (generated)}};
+  \draw[arr] (gen) -- (tests);
+  \draw[arr] (gen) -- (spec);
+
+  % RL training nodes
+  \node[rlbox, below=0.9cm of tests] (rlA)
+    {RL Training\\{\footnotesize reward: pass unit tests}};
+  \node[rlbox, below=0.9cm of spec]  (rlB)
+    {RL Training\\{\footnotesize reward: Verus checks}};
+  \draw[arr] (tests) -- (rlA);
+  \draw[arr] (spec)  -- (rlB);
+
+  % Code outputs
+  \node[box, below=0.7cm of rlA] (codeA) {Code (A)};
+  \node[box, below=0.7cm of rlB] (codeB) {Code (B)};
+  \draw[arr] (rlA) -- (codeA);
+  \draw[arr] (rlB) -- (codeB);
+
+  % Evaluation node
+  \node[evalbox, minimum width=4cm,
+        below=0.7cm of $(codeA)!0.5!(codeB)$] (eval)
+    {Evaluate vs.\ gold Verus spec\\{\footnotesize reward hacking $\Leftrightarrow$ spec not satisfied}};
+  \draw[arr] (codeA) -- (eval);
+  \draw[arr] (codeB) -- (eval);
+
+  % Gold spec dashed arrow going around the right side
+  \draw[arr, dashed, draw=orange!70] (bench.east)
+        -- ++(4.5,0)
+        |- (eval.east)
+        node[pos=0.25, right, font=\scriptsize, text=orange!80!black]{gold spec};
+
+\end{tikzpicture}
+\caption{Experimental setup. Both branches receive only the natural language specification as input. The dashed arrow indicates the gold-standard Verus specification used solely for final evaluation.}
+\label{fig:setup}
+\end{figure}
+
+Note: it's possible that the code produced by the models does satisfy the gold-standard specification,
     but Verus rejects it due to insufficient proof annotations. 
     If we find this to be the case, 
     we would add a step between (3) and (4) which asks a model to add only proof annotations to the produced code,
     to help Verus see that the implementation does satisfy the specification.
 
--benchmarks (Amar)
-    - human eval
+\textbf{Benchmarks}: We will evaluate this on the human eval Verus
+benchmark~\cite{alphaverus}, which consists of around 100 coding problems with
+both natural language specifications, formal Verus specifications, and a Rust
+implementation. This is the best starting point: it is the largest known Verus
+benchmark set with both natural language and formal specifications. Time
+permitted, we could explore other benchmark sets.
+%  such as the ones used in RAGVerus~\cite{RAGVerus}, Vericode~\cite{vericode}, or Verus SAGE~\cite{verussage}. However, all of these benchmark sets are missing one of the three aforementioned components (natural language specification, formal specification, Rust implementation), so we would need to either generate the missing component using a model or manually annotate it ourselves.
 
--confouding factors (Amar)
-    - bad coverage by unit tests
-    - specifications are an under-approximation
-    - data contamination
-    - models are maybe worse at generating specification (maybe this is something we want to measure)
+\textbf{Confouding Factors:} We identify a few confouding factors that could challenge the validity of our results:
+
+\begin{enumerate}
+    \item \textbf{Bad coverage by unit tests:} If the unit testing method is not well-designed, it may fail to capture important edge cases, making it easier for the model to hack the reward mechanism.
+    %  To mitigate this, we will explore
+    % existing literature for test case generation.
+    \item \textbf{Data contamination:} The human-eval Verus benchmark is publicly available, so there is a risk that the models we use have been trained on this data, which could bias our results. 
+    % For this course project, we accept this as a risk. In future work, we could explore generating our own benchmark set.
+    \item \textbf{Specifications are an under approximation:} A model could generate correct code that does not satisfy the gold standard specification.
+    \item \textbf{Models are worse at generating specifications:}. A model could struggle to generate correct specifications, but may be much more proficient
+    at generating unit tests.
+\end{enumerate}
 
 \bibliographystyle{plain}
 \bibliography{references}
