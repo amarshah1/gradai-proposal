@@ -89,42 +89,42 @@ Our project aims to understand one of the hypotheses of this work: whether forma
     {Benchmark\\{\footnotesize NL spec + gold Verus spec}};
 
   % NL spec fed to generator
-  \node[genbox, below=of bench] (gen)
+  \node[rlbox, below=of bench] (gen)
     {LLM Generator\\{\footnotesize (given NL spec only)}};
   \draw[arr] (bench) -- node[right, font=\scriptsize]{NL spec} (gen);
 
   % Two branches
   \node[genbox, below left=1.0cm and 1.8cm of gen]  (tests)
-    {(A) Unit Tests};
+    {Unit Tests};
   \node[genbox, below right=1.0cm and 1.8cm of gen] (spec)
-    {(B) Verus Spec\\{\footnotesize (generated)}};
+    {Verus Spec\\{\footnotesize (generated)}};
   \draw[arr] (gen) -- (tests);
   \draw[arr] (gen) -- (spec);
 
   % RL training nodes
   \node[rlbox, below=0.9cm of tests] (rlA)
-    {RL Training\\{\footnotesize reward: pass unit tests}};
+    {LLM Implementor\\{\footnotesize goal: pass unit tests}};
   \node[rlbox, below=0.9cm of spec]  (rlB)
-    {RL Training\\{\footnotesize reward: Verus checks}};
+    {LLM Implementor\\{\footnotesize goal: satisfy Verus spec}};
   \draw[arr] (tests) -- (rlA);
   \draw[arr] (spec)  -- (rlB);
 
   % Code outputs
-  \node[box, below=0.7cm of rlA] (codeA) {Code (A)};
-  \node[box, below=0.7cm of rlB] (codeB) {Code (B)};
+  \node[box, below=0.7cm of rlA] (codeA) {Code A};
+  \node[box, below=0.7cm of rlB] (codeB) {Code B};
   \draw[arr] (rlA) -- (codeA);
   \draw[arr] (rlB) -- (codeB);
 
   % Evaluation node
   \node[evalbox, minimum width=4cm,
         below=0.7cm of $(codeA)!0.5!(codeB)$] (eval)
-    {Evaluate vs.\ gold Verus spec\\{\footnotesize reward hacking $\Leftrightarrow$ spec not satisfied}};
+    {Evaluate \\{\footnotesize reward hacking $\Leftrightarrow$ gold Verus spec not satisfied}};
   \draw[arr] (codeA) -- (eval);
   \draw[arr] (codeB) -- (eval);
 
   % Gold spec dashed arrow going around the right side
   \draw[arr, dashed, draw=orange!70] (bench.east)
-        -- ++(4.5,0)
+        -- ++(5.5,0)
         |- (eval.east)
         node[pos=0.25, right, font=\scriptsize, text=orange!80!black]{gold spec};
 
