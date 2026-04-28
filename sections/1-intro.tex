@@ -1,15 +1,31 @@
 \section{Introduction}
 \label{intro}
 
-Reward hacking is a fundamental challenge in reinforcement learning (RL) where
+Reward hacking---where
 an agent exploits loopholes in the reward function to achieve high rewards
-without performing the intended task~\cite{rewardhacking}. This phenomenon can
-lead to unintended consequences and suboptimal performance, posing a significant
-threat to the safet and reliability of AI systems~\cite{anthropicrh}. As the
-state of the art AI models continue to be post-trained in RL enovironements, the
-risk of reward hacking becomes increasingly pertinent. 
+without performing the intended task~\cite{rewardhacking}---is a fundamental challenge in reinforcement learning (RL). 
+This phenomenon can lead to unintended consequences and suboptimal performance, posing a significant
+threat to the safety and reliability of AI systems~\cite{anthropicrh}. 
+This risk is becoming increasingly pertinent as
+state-of-the-art AI models continue to be post-trained in RL environments. 
+
+NOTE: We start by motivating with RL, so we need to justify why we don't do full RL/
+why our preliminary results show promise.
+
+Programming tasks are a common domain for AI training,
+with unit tests as a popular metric for assessing correctness. 
+However, unit tests are fundamentally limited in their coverage: 
+they can only check a finite subset of inputs. 
+This makes them susceptible to reward hacking, as prior work has shown. [TODO: cite]
 
 
+% Our work aims to investigate reward hacking in programming tasks, 
+% looking specifically at unit tests and \emph{formal specifications}
+% as ways to assess correctness. 
+% Unit tests have been shown to be susceptible
+
+
+\begin{comment}
 In this work, we examine the propensity of reward hacking in programming tasks. We observe that when provided test cases, models will reward hack (eg. hardcode the test cases) 20\% of the time. We propose a 
 potential solution: formal specifications~\cite{Verus}. Formal specfications provide a mathematical guarantee that a program obeys a specification for all available inputs. If a program satisfies a 
 correct formal specification, it is guaranteed to be correct for all inputs, and thus reward hacking is not possible. While in practice,
@@ -27,43 +43,27 @@ Our contributions are as follows:
 \item We develop a measure of reward hacking in programming tasks and use it to empirically evaluate the prevalence of reward hacking when using test cases versus formal specifications.
 \item We find that reward hacking occurs 20\% of the time with test cases and 0\% of the time with formal specifications and discuss future work to address the challenges of using formal specifications in practice.
 \end{itemize}
+\end{comment}
+% \subsection{Background}
+% \label{background}
 
-\subsection{Background}
-\label{background}
-
-A \emph{formal specification} mathematically describes the expected properties of a program. 
-Unlike testing, which checks a finite set of inputs, 
-formal specifications can quantify over all possible inputs, 
-enabling them to provide guarantees over all possible program behaviors.
+Conversely, \emph{formal specifications} can quantify over all possible inputs, 
+mathematically describing the expected program properties. 
+This enables them to provide guarantees over all possible program behaviors. 
+% Unlike testing,
+% formal specifications can quantify over all possible inputs, 
+% enabling them to provide guarantees over all possible program behaviors.
 \emph{Formal verification} is the process of mathematically proving that a program satisfies its specification.
 Thus, it shifts the burden from ensuring correctness of an entire implementation 
 (which may have complex performance optimizations)
 to ensuring correctness of a higher-level mathematical specification, 
 an easier task. 
 
+This brings us to the following research question:
+\textbf{are formal specifications less susceptible to reward hacking compared to unit tests?}
+We investigate this by applying the same pipeline to both unit tests and formal specs 
+and contrasting the results.
 % typically using a verification tool to ensure proof correctness.
-
-One state-of-the-art verification tool is Verus~\cite{Verus}, a semi-automated Rust verifier which 
-has already been used at the intersection
-of AI and verification \cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
-In Verus, users can write three kinds of code: 
-\begin{itemize}
-    \item \emph{spec} code describes higher-level program properties such as function pre- and post-conditions
-    or loop invariants.
-    \item \emph{proof} annotations help give Verus hints for proving an implementation satisfies its spec:
-    Verus is semi-automated, meaning it can automatically prove many specifications, 
-    but when more complex reasoning is required,
-    it may need some help in knowing intermediate proof goals 
-    or useful lemma calls.
-    \item \emph{exec} code is simply regular Rust executable code. 
-    During compilation, Verus erases spec and proof code, 
-    leaving only the exec code: 
-    there is no runtime performance cost associated with adding Verus proofs.
-\end{itemize}
-Verus is designed to integrate directly into Rust code: 
-it relies on the Rust type-checker and uses Rust macros and annotations.
-However, using Verus does involve some Verus-specific syntax, 
-such as additional mathematical keywords or naming function outputs to describe their expected properties.
 
 % Verus will then check if the code satisfies these requirements. 
 % Note that Verus's verification result is only as good as the specification quality: 

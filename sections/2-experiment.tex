@@ -1,7 +1,33 @@
 \section{Experimental Setup}
 \label{results}
 
- Our experimental set-up is as follows:
+\subsection{Verification Tool}
+
+We use Verus~\cite{Verus}, a semi-automated Rust verification tool, as our tool of choice: Verus 
+has already been used at the intersection
+of AI and verification \cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
+
+In Verus, users can write three kinds of code: 
+\begin{itemize}
+    \item \emph{spec} code describes higher-level program properties such as function pre- and post-conditions
+    or loop invariants.
+    \item \emph{proof} annotations help give Verus hints for proving an implementation satisfies its spec:
+    Verus is semi-automated, meaning it can automatically prove many specifications, 
+    but when more complex reasoning is required,
+    it may need some help in knowing intermediate proof goals 
+    or useful lemma calls.
+    \item \emph{exec} code is simply regular Rust executable code. 
+    During compilation, Verus erases spec and proof code, 
+    leaving only the exec code: 
+    there is no runtime performance cost associated with adding Verus proofs.
+\end{itemize}
+Verus is designed to integrate directly into Rust code: 
+it relies on the Rust type-checker and uses Rust macros and annotations.
+However, using Verus does involve some Verus-specific syntax, 
+such as additional mathematical keywords or naming function outputs to describe their expected properties.
+
+\subsection{Experimental Design}
+
 \begin{enumerate}
     \item We start with a benchmark of coding problems 
     defined by both natural language and formal Verus specifications. 
