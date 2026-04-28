@@ -3,11 +3,14 @@
 
 Reward hacking is a fundamental challenge in reinforcement learning (RL) where
 an agent exploits loopholes in the reward function to achieve high rewards
-without performing the intended task \cite{rewardhacking}. This phenomenon can
+without performing the intended task \cite{RewardHacking}. This phenomenon can
 lead to unintended consequences and suboptimal performance, posing a significant
-threat to the reliability and safety of AI systems. As RL continues to be applied in critical
-domains such as autonomous driving, healthcare, and finance, understanding and
-mitigating reward hacking is of paramount importance.
+threat to the safet and reliability of AI systemsy~\cite{anthropicrh}. As the
+state of the art AI models continue to be post-trained in RL enovironements, the
+risk of reward hacking becomes increasingly pertinent. 
+In this work, we examine the propensity of reward hacking in programming tasks. We observe that when provided test cases, models will reward hack (eg. hardcode the test cases) around 20\% of the time. We also discuss a 
+potential solution: formal specifications~\cite{Verus}. Formal specfications are a mathematical  way to define the desired behavior of code. and they can help mitigate reward hacking by providing clear and unambiguous criteria for success. By using formal specifications, we can ensure that the agent's behavior aligns with the intended goals, even in the presence of complex or ambiguous reward structures.
+
 
 Our contributions are as follows:
 \begin{itemize}
