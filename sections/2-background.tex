@@ -16,12 +16,26 @@ an easier task.
 One state-of-the-art verification tool is Verus~\cite{Verus}, a semi-automated Rust verifier which 
 has already been used at the intersection
 of AI and verification \cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
-Verus is written in Rust and uses Rust-style annotations. 
-Verus divides into three modes: specification, proof, and executable. 
-Specification and proof code is deleted during compilation, so there is no performance cost from adding annotations.
-Need to explain proof annotations.
-With Verus, programmers can annotate their code with logical pre- and post-conditions, loop invariants, and other proof obligations.
-Verus will then check if the code satisfies these requirements. 
+In Verus, users can write three kinds of code: 
+\begin{itemize}
+    \item \emph{spec} code describes higher-level program properties such as function pre- and post-conditions
+    or loop invariants.
+    \item \emph{proof} annotations help give Verus hints for proving an implementation satisfies its spec:
+    Verus is semi-automated, meaning it can automatically prove many specifications, 
+    but when more complex reasoning is required,
+    it may need some help in knowing intermediate proof goals 
+    or useful lemma calls.
+    \item \emph{exec} code is simply regular Rust executable code. 
+    During compilation, Verus erases spec and proof code, 
+    leaving only the exec code: 
+    there is no runtime performance cost associated with adding Verus proofs.
+\end{itemize}
+Verus is designed to integrate directly into Rust code: 
+it relies on the Rust type-checker and uses Rust macros and annotations.
+However, using Verus does involve some Verus-specific syntax, 
+such as additional mathematical keywords or naming function outputs to describe their expected properties.
+
+% Verus will then check if the code satisfies these requirements. 
 % Note that Verus's verification result is only as good as the specification quality: 
 % if the specification is incorrect or fails to capture all possible cases, 
 % implementations verified against such specifications will also lack full guarantees.

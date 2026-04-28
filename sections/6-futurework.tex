@@ -4,11 +4,10 @@
 Once we address the challenges outlined in the previous section, 
 we plan to run rejection fine-tuning on the code generation part of our pipeline, 
 to see if this amplifies reward-hacking behavior.
-We would use satisfying the unit tests/Verus specification as the reward
+We would use satisfying the unit tests/generated Verus specification as the reward
 and train on traces which satisfy the reward but are not actually correct. 
 
-More generally, we also want to explore the question of if we can somehow get the best of both worlds,
-combining the ease of unit testing and the guarantees of formal specification,
-by exploring approaches which fall between these two. 
-This would include further investigation into approaches like fuzzing and property-based testing, 
-as well as ways that we can improve the shortfalls of unit tests and formal specs.
+More generally, we also want to see if we can somehow get the best of both worlds,
+combining the ease of unit testing and the guarantees of formal specification. 
+This would include further investigation into methods like fuzzing and property-based testing, 
+as well as looking into ways that we can improve the shortfalls of using formal specs.
