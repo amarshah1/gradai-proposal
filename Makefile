@@ -21,7 +21,7 @@ ALL_FILES_MODE?=
 
 # If set then MAIN_TARGET is used as the root tex file of the project
 # to be built.
-MAIN_TARGET?=
+MAIN_TARGET?= report.tex
 
 # If set to git commits, separated by spaces, then `make diff` will
 # produce diffs against each commit. Additionally, `make diff-REV`
