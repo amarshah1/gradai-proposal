@@ -3,13 +3,27 @@
 
 Reward hacking is a fundamental challenge in reinforcement learning (RL) where
 an agent exploits loopholes in the reward function to achieve high rewards
-without performing the intended task \cite{reward_hacking}. This phenomenon can
+without performing the intended task~\cite{rewardhacking}. This phenomenon can
 lead to unintended consequences and suboptimal performance, posing a significant
-threat to the reliability and safety of AI systems. As RL continues to be applied in critical
-domains such as autonomous driving, healthcare, and finance, understanding and
-mitigating reward hacking is of paramount importance.
+threat to the safet and reliability of AI systems~\cite{anthropicrh}. As the
+state of the art AI models continue to be post-trained in RL enovironements, the
+risk of reward hacking becomes increasingly pertinent. 
+
+
+In this work, we examine the propensity of reward hacking in programming tasks. We observe that when provided test cases, models will reward hack (eg. hardcode the test cases) 20\% of the time. We propose a 
+potential solution: formal specifications~\cite{Verus}. Formal specfications provide a mathematical guarantee that a program obeys a specification for all available inputs. If a program satisfies a 
+correct formal specification, it is guaranteed to be correct for all inputs, and thus reward hacking is not possible. While in practice,
+formal specifications are difficult to write and underspecifications are
+theoretically reward hackable. However, we empirically observe that formal 
+specifications were rewawrd hacked 0\% of the time.
+
+While this paints a rosy picture, there are still major challenges with formal verification. Formal languages are more difficult for LLMs to generate and places an additional burden: they must write a proof that their code satisfies the specification. This shows up in our results: LLMs are able to generate correct implementations for 70\% of the benchmarks when given test cases, but only 21\% when given formal specifications. Thus, while formal specifications may be a promising solution to reward hacking, there are still significant challenges to overcome before they can be widely adopted.
+
+
 
 Our contributions are as follows:
 \begin{itemize}
-\item
+\item We propose formal specifications as a potential solution to reward hacking in programming tasks.
+\item We develop a measure of reward hacking in programming tasks and use it to empirically evaluate the prevalence of reward hacking when using test cases versus formal specifications.
+\item We find that reward hacking occurs 20\% of the time with test cases and 0\% of the time with formal specifications and discuss future work to address the challenges of using formal specifications in practice.
 \end{itemize}
