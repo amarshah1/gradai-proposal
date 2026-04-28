@@ -1,0 +1,56 @@
+\section{Results}\label{sec:results}
+
+\paragraph{Setup.} We evaluated Qwen3-Coder on $70$ HumanEval-Verus
+benchmarks~\cite{alphaverus}, each consisting of a natural-language description, a
+gold-standard Verus specification, and a reference Rust implementation. For each
+problem the model produced $5$ samples (pass@$5$) under each of the two reward
+mechanisms described in Section~\ref{intro}: Branch A rewards passing
+model-generated unit tests, Branch B rewards verification against a
+model-generated Verus specification. Both branches were prompted with $5$
+few-shot examples ($4$ correct implementations and $1$ deliberate reward hack,
+included so the model is aware reward hacking is on the table). A sample is
+labeled \emph{correct} only if it satisfies the gold-standard Verus
+specification; this judgement is independent of the in-loop reward signal.
+
+\paragraph{Headline numbers.}
+Figure~\ref{fig:results-pass-at-k} summarizes the per-problem outcome
+distribution for each branch.
+
+\begin{figure}[h]
+\input{figures/results-pass-at-k}
+\end{figure}
+
+Under the unit-test reward (Branch A), $70.0\%$ of problems are solved
+correctly, but a further $20.0\%$ pass the generated tests while being incorrect
+under the gold-standard specification ($11.4\%$ where every one of the $5$
+samples is wrong, plus $8.6\%$ where the $5$ samples are a mix of correct and
+incorrect implementations that all satisfy the tests). The remaining $10.0\%$
+fail the tests outright. We interpret the $20.0\%$ slice as reward hacking:
+the model produced code that the reward signal accepts but the
+specification rejects. Manual inspection confirms the typical failure
+mode is hard-coding the test inputs.
+
+Under the formal-spec reward (Branch B), $21.4\%$ of problems are verified by
+Verus and judged correct against the gold-standard, and the remaining $78.6\%$
+fail verification. Notably, $0\%$ of samples passed verification while being
+incorrect -- the model did not reward-hack. This is the property formal
+specifications are supposed to give us: when the reward signal is a
+machine-checked proof of a specification, hacking the reward requires producing
+a verified-but-wrong program, which the soundness of Verus rules out (modulo
+under-specification, which we did not observe in practice on these problems).
+
+\paragraph{Takeaways.}
+\begin{itemize}
+\item \textbf{Reward hacking is empirically much rarer with formal specifications.}
+  $20.0\%$ vs.\ $0\%$ on this benchmark.
+\item \textbf{Reward hacking with formal specifications is not impossible in principle.}
+  An under-specification that admits incorrect programs would still be reward
+  hackable; we simply did not observe one here.
+\item \textbf{Unit tests still produce more \emph{correct} code overall.} Branch
+  A reaches $70.0\%$ true success vs.\ $21.4\%$ for Branch B. The bottleneck for
+  Branch B is not specification quality but rather the model's ability to
+  produce code together with proof annotations that Verus can check; we discuss
+  this trade-off further in Section~\ref{challenges}.
+\end{itemize}
+
+\as{Experiments that we want to run next: varying model, A1 vs A2, increasing few-shot, pass@k}

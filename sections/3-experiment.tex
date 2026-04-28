@@ -1,2 +1,38 @@
-\section{Results}
+\section{Experimental Setup and Results}
 \label{results}
+
+ Our experimental set-up is as follows:
+\begin{enumerate}
+    \item We start with a benchmark of coding problems 
+    defined by both natural language and formal Verus specifications. 
+    We consider these formal Verus specifications to be the ``gold-standard" 
+    which ultimately defines the coding problem.
+    \item We provide a model with just the natural language specifications, 
+    and ask it to generate 
+    (A) unit tests to check if an implementation satisfies the specification and 
+    (B) a formal Verus specification. 
+    Note that this generated spec may differ from the original gold-standard spec.
+    \item For both (A) and (B), we evaluate the two models by checking if the code produced also satisfies
+    the gold-standard spec. 
+    If it does not, we interpret this to mean that the model successfully ``hacked''
+    the reward mechanism. 
+    We hypothesize that we will see more cases 
+    when the produced code passes the unit tests but does not satisfy the gold-standard spec,
+    compared to using generated specs as the reward mechanism.
+\end{enumerate}
+\begin{figure}[h]
+\input{figures/setup-diagram}
+\end{figure}
+
+% Note: it's possible that the code produced by the models does satisfy the gold-standard specification,
+%     but Verus rejects it due to insufficient proof annotations. 
+%     If we find this to be the case, 
+%     we would add a step between (3) and (4) which asks a model to add only proof annotations to the produced code,
+%     to help Verus see that the implementation does satisfy the specification.
+
+\textbf{Benchmarks}: We will evaluate this on the human eval Verus
+benchmark~\cite{alphaverus}, which consists of around 100 coding problems with
+both natural language specifications, formal Verus specifications, and a Rust
+implementation. This is the best starting point: it is the largest known Verus
+benchmark set with both natural language and formal specifications. Time
+permitted, we could explore other benchmark sets.

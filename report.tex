@@ -58,6 +58,24 @@
 \usepackage{microtype}      % microtypography
 \usepackage{xcolor}         % colors
 \usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds, calc}
+
+
+% --- todo notes ---
+% Comment out the next line (or pass [disable]) before camera-ready
+% to suppress every \todo / \et / \as marker in one go.
+\usepackage[colorinlistoftodos,prependcaption,textsize=small]{todonotes}
+% \usepackage[disable]{todonotes}
+
+% Per-author inline todo macros. Usage: \et{rephrase this} or \as{cite?}.
+\newcommand{\et}[1]{\todo[inline,color=blue!20,size=\small]{\textbf{ET:} #1}}
+\newcommand{\as}[1]{\todo[inline,color=green!20,size=\small]{\textbf{AS:} #1}}
+% Margin variants (shorter notes that don't break the paragraph).
+\newcommand{\etm}[1]{\todo[color=blue!20,size=\scriptsize]{ET: #1}}
+\newcommand{\asm}[1]{\todo[color=green!20,size=\scriptsize]{AS: #1}}
 
 % Note. For the workshop paper template, both \title{} and \workshoptitle{} are required, with the former indicating the paper title shown in the title and the latter indicating the workshop title displayed in the footnote. 
 \title{Reward Hacking: Unit Tests vs Formal Specifications}
@@ -119,6 +137,8 @@
 \input{sections/2-background}
 
 \input{sections/3-experiment}
+
+\input{sections/3.5-results}
 
 \input{sections/4-challenges}
 
