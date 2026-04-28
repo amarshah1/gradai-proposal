@@ -1,2 +1,56 @@
 \section{Challenges}
 \label{challenges}
+
+We encountered two significant challenges in our efforts to carry out our pipeline.
+First, while LLMs are very familiar with Rust code, 
+smaller LLMs have less experience with Verus-specific syntax.
+Thus, they struggled to generate Verus specifications, Verus implementations, and Verus proof annotations.
+
+Second, it was difficult to check if an implementation met the gold-standard Verus specification. 
+Initially, we tried asking an LLM (Claude Opus) to take a generated implementation 
+and add only proof annotations to help Verus see how the implementation satisfied the gold-standard specification;
+if the LLM was unable to do so, we interpreted that to mean the implementation was incorrect.
+However, even when strongly prompted against this, 
+the LLM would occasionally modify the implementation to make it satisfy the specification.
+Additionally, it is hard in general to verify an implementation which is written independently of the specification;
+it was quite possible that the implementation was in fact correct, 
+but the LLM was unable to determine the necessary proof annotations. 
+
+Our next approach was to use the Verus gold-standard specifications to generate \emph{property-based tests}
+which sample inputs from the input space determined by the Rust type, 
+subject to the input constraints outlined in the specs.
+Since we already had a gold-standard implementation which we know to be correct 
+(since it satisfies the gold-standard specs), 
+we could use that implementation to generate the expected correct output,
+and test if the generated implementation gives the same output. 
+
+However, it was difficult to achieve good coverage merely by sampling from the input space:
+in many cases, the function would accept all possible inputs of a certain type,
+but only do something interesting if that input took a specific form. 
+This approach would generate inputs of that specific form with very low probability,
+so we needed to add task-specific instructions to our test generation script,
+which is not scalable.
+
+We are currently exploring another approaches:
+we want to try using an LLM as a judge to generate an input on which the generated implementation
+and the gold-standard implementation differ, if it exists.
+Since having a concrete counter-example only guarantees that the implementations differ 
+(as the lack of a counter-example is not a guarantee that they are the same),
+we would do this in combination with a test suite.
+
+We also want to try generating tests based on the gold-standard \emph{implementation} rather than the specification,
+in a way that achieves full coverage over all branches of the implementation.
+We hope that this would solve the issues of merely sampling over the input space.
+
+\section{Future Work}
+Once we address the challenges outlined in the previous section, 
+we plan to run rejection fine-tuning on the code generation part of our pipeline, 
+to see if this amplifies reward-hacking behavior.
+We would use satisfying the unit tests/Verus specification as the reward
+and train on traces which satisfy the reward but are not actually correct. 
+
+More generally, we also want to explore the question of if we can somehow get the best of both worlds,
+combining the ease of unit testing and the guarantees of formal specification,
+by exploring approaches which fall between these two. 
+This would include further investigation into approaches like fuzzing and property-based testing, 
+as well as ways that we can improve the shortfalls of unit tests and formal specs.
