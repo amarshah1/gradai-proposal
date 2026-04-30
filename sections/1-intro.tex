@@ -3,20 +3,18 @@
 
 Reward hacking---where
 an agent exploits loopholes in the reward function to achieve high rewards
-without performing the intended task~\cite{rewardhacking}---is a fundamental challenge in reinforcement learning (RL). 
+without performing the intended task~\cite{rewardhacking}---is a fundamental challenge in reinforcement learning (RL)~\cite{baker2025monitoringreasoningmodelsmisbehavior}. 
 This phenomenon can lead to unintended consequences and suboptimal performance, posing a significant
 threat to the safety and reliability of AI systems~\cite{anthropicrh}. 
-This risk is becoming increasingly pertinent as
-state-of-the-art AI models continue to be post-trained in RL environments. 
-
-NOTE: We start by motivating with RL, so we need to justify why we don't do full RL/
-why our preliminary results show promise.
+% Add back in?
+% This risk is becoming increasingly pertinent as
+% state-of-the-art AI models continue to be post-trained in RL environments. 
 
 Programming tasks are a common domain for AI training,
 with unit tests as a popular metric for assessing correctness. 
 However, unit tests are fundamentally limited in their coverage: 
-they can only check a finite subset of inputs. 
-This makes them susceptible to reward hacking, as prior work has shown. [TODO: cite]
+they only check a finite subset of inputs. 
+This makes them susceptible to reward hacking, as prior work has shown~\cite{liu_2023}\cite{xin_2017}\cite{yuan2024manualtestsevaluatingimproving}.
 
 
 % Our work aims to investigate reward hacking in programming tasks, 
@@ -47,17 +45,16 @@ Our contributions are as follows:
 % \subsection{Background}
 % \label{background}
 
-Conversely, \emph{formal specifications} can quantify over all possible inputs, 
-mathematically describing the expected program properties. 
-This enables them to provide guarantees over all possible program behaviors. 
+Conversely, \emph{formal specifications} 
+mathematically describe the expected program properties, 
+enabling them to provide guarantees over all possible program inputs and behaviors. 
 % Unlike testing,
 % formal specifications can quantify over all possible inputs, 
 % enabling them to provide guarantees over all possible program behaviors.
 \emph{Formal verification} is the process of mathematically proving that a program satisfies its specification.
 Thus, it shifts the burden from ensuring correctness of an entire implementation 
 (which may have complex performance optimizations)
-to ensuring correctness of a higher-level mathematical specification, 
-an easier task. 
+to ensuring correctness of a higher-level mathematical specification---an easier task. 
 
 This brings us to the following research question:
 \textbf{are formal specifications less susceptible to reward hacking compared to unit tests?}

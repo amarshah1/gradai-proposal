@@ -1,5 +1,12 @@
 \section{Results}\label{sec:results}
 
+We use two key questions to evaluate our comparison:
+\begin{enumerate}
+  \item How good is the model at producing code which satisfies the provided reward?
+  \item How good is the model at producing correct code, 
+  given that it satisfies the provided reward?
+\end{enumerate}
+
 \paragraph{Setup.} We evaluated Qwen3-Coder on $70$ HumanEval-Verus
 benchmarks~\cite{alphaverus}, each consisting of a natural-language description, a
 gold-standard Verus specification, and a reference Rust implementation. For each

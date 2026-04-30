@@ -3,48 +3,49 @@
 
 \subsection{Verification Tool}
 
-We use Verus~\cite{Verus}, a semi-automated Rust verification tool, as our tool of choice: Verus 
-has already been used at the intersection
+We use Verus~\cite{Verus}, a semi-automated Rust verification tool with multiple prior applications at the intersection
 of AI and verification \cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
 
 In Verus, users can write three kinds of code: 
 \begin{itemize}
-    \item \emph{spec} code describes higher-level program properties such as function pre- and post-conditions
+    \item \texttt{spec} code describes higher-level program properties such as function pre- and post-conditions
     or loop invariants.
-    \item \emph{proof} annotations help give Verus hints for proving an implementation satisfies its spec:
-    Verus is semi-automated, meaning it can automatically prove many specifications, 
-    but when more complex reasoning is required,
-    it may need some help in knowing intermediate proof goals 
+    \item \texttt{proof} annotations give Verus hints for verifying proof goals:
+    Verus is semi-automated, meaning it automatically proves many specifications, 
+    but more complex proofs may require some help to determine intermediate proof goals 
     or useful lemma calls.
-    \item \emph{exec} code is simply regular Rust executable code. 
+    \item \texttt{exec} code is Rust executable code. 
     During compilation, Verus erases spec and proof code, 
     leaving only the exec code: 
-    there is no runtime performance cost associated with adding Verus proofs.
+    thus, adding Verus proofs incurs no runtime performance cost.
 \end{itemize}
 Verus is designed to integrate directly into Rust code: 
-it relies on the Rust type-checker and uses Rust macros and annotations.
+it relies on the Rust type checker and uses Rust macros and annotations.
 However, using Verus does involve some Verus-specific syntax, 
-such as additional mathematical keywords or naming function outputs to describe their expected properties.
+such as additional mathematical keywords or named function outputs to describe their expected properties.
 
 \subsection{Experimental Design}
+We limit this project's scope to reward hacking with few-shot prompts,
+since this provides a preliminary comparison; 
+we believe future RL training will amplify the results shown below.
 
 \begin{enumerate}
-    \item We start with a benchmark of coding problems 
-    defined by both natural language and formal Verus specifications. 
-    We consider these formal Verus specifications to be the ``gold-standard" 
-    which ultimately defines the coding problem.
-    \item We provide a model with just the natural language specifications, 
+    \item Our benchmark contains coding problems 
+    with NL descriptions and formal Verus specs;
+    we consider the formal Verus specs to be the ``gold-standard''
+    ultimately defining the problems.
+    \item We provide a model with only the NL descriptions, 
     and ask it to generate 
-    (A) unit tests to check if an implementation satisfies the specification and 
+    (A) unit tests for evaluating this coding task and 
     (B) a formal Verus specification. 
-    Note that this generated spec may differ from the original gold-standard spec.
-    \item For both (A) and (B), we evaluate the two models by checking if the code produced also satisfies
+    This generated spec may differ from the original gold-standard spec.
+    \item For both (A) and (B), we check if the code produced also satisfies
     the gold-standard spec. 
-    If it does not, we interpret this to mean that the model successfully ``hacked''
+    If it does not (and satisfies the unit tests/generated Verus spec), 
+    we interpret this to mean the model successfully ``hacked''
     the reward mechanism. 
-    We hypothesize that we will see more cases 
-    when the produced code passes the unit tests but does not satisfy the gold-standard spec,
-    compared to using generated specs as the reward mechanism.
+    We hypothesize we will see more reward hacking with unit tests,
+    compared to the Verus generated specs.
 \end{enumerate}
 \begin{figure}[h]
 \input{figures/setup-diagram}
@@ -56,9 +57,10 @@ such as additional mathematical keywords or naming function outputs to describe 
 %     we would add a step between (3) and (4) which asks a model to add only proof annotations to the produced code,
 %     to help Verus see that the implementation does satisfy the specification.
 
-\textbf{Benchmarks}: We will evaluate this on the human eval Verus
-benchmark~\cite{alphaverus}, which consists of around 100 coding problems with
-both natural language specifications, formal Verus specifications, and a Rust
-implementation. This is the best starting point: it is the largest known Verus
-benchmark set with both natural language and formal specifications. Time
-permitted, we could explore other benchmark sets.
+\textbf{Benchmark}: We use the HumanEval-Verus
+dataset~\cite{alphaverus}, which has 78 coding tasks with
+NL descriptions, formal Verus specs, and Rust
+implementations satisfying the Verus specs. 
+This is the largest known
+benchmark with NL and formal Verus specs. 
+We leave other benchmarks to future work.
