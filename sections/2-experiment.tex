@@ -3,10 +3,9 @@
 
 \subsection{Verification Tool}
 
-We use Verus~\cite{Verus}, a semi-automated Rust verification tool with multiple prior applications at the intersection
+We use Verus~\cite{Verus}, a semi-automated Rust verification tool with prior applications at the intersection
 of AI and verification \cite{AutoVerus,alphaverus,verussage,RAGVerus,vericode}. 
-
-In Verus, users can write three kinds of code: 
+Verus allows users to write three kinds of code:
 \begin{itemize}
     \item \texttt{spec} code describes higher-level program properties such as function pre- and post-conditions
     or loop invariants.
@@ -30,14 +29,14 @@ since this provides a preliminary comparison;
 we believe future RL training will amplify the results shown below.
 
 \begin{enumerate}
-    \item Our benchmark contains coding problems 
-    with NL descriptions and formal Verus specs;
-    we consider the formal Verus specs to be the ``gold-standard''
+    \item Our benchmark contains coding tasks 
+    with natural language (NL) descriptions and formal Verus specs;
+    we interpret these specs as the \emph{gold-standard}
     ultimately defining the problems.
     \item We provide a model with only the NL descriptions, 
     and ask it to generate 
     (A) unit tests for evaluating this coding task and 
-    (B) a formal Verus specification. 
+    (B) a formal Verus spec. 
     This generated spec may differ from the original gold-standard spec.
     \item For both (A) and (B), we check if the code produced also satisfies
     the gold-standard spec. 
@@ -45,7 +44,7 @@ we believe future RL training will amplify the results shown below.
     we interpret this to mean the model successfully ``hacked''
     the reward mechanism. 
     We hypothesize we will see more reward hacking with unit tests,
-    compared to the Verus generated specs.
+    compared to the generated Verus specs.
 \end{enumerate}
 \begin{figure}[h]
 \input{figures/setup-diagram}

@@ -11,7 +11,7 @@ threat to the safety and reliability of AI systems~\cite{anthropicrh}.
 % state-of-the-art AI models continue to be post-trained in RL environments. 
 
 Programming tasks are a common domain for AI training,
-with unit tests as a popular metric for assessing correctness. 
+with unit tests as a popular metric for correctness. 
 However, unit tests are fundamentally limited in their coverage: 
 they only check a finite subset of inputs. 
 This makes them susceptible to reward hacking, as prior work has shown~\cite{liu_2023}\cite{xin_2017}\cite{yuan2024manualtestsevaluatingimproving}.
@@ -56,10 +56,10 @@ Thus, it shifts the burden from ensuring correctness of an entire implementation
 (which may have complex performance optimizations)
 to ensuring correctness of a higher-level mathematical specification---an easier task. 
 
-This brings us to the following research question:
-\textbf{are formal specifications less susceptible to reward hacking compared to unit tests?}
-We investigate this by applying the same pipeline to both unit tests and formal specs 
-and contrasting the results.
+We investigate this question:
+\textbf{compared to unit tests, are formal specifications less susceptible to reward hacking?}
+We apply the same pipeline to unit tests and formal specs 
+and contrast the results.
 % typically using a verification tool to ensure proof correctness.
 
 % Verus will then check if the code satisfies these requirements. 
