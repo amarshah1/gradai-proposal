@@ -1,7 +1,7 @@
 \section{Results}\label{sec:results}
 
-We investigate how varying the number of provided reward-hacked examples 
-and varying the model size affects the evaluation metrics. 
+% We investigate how varying the number of provided reward-hacked examples 
+% and varying the model size affects the evaluation metrics. 
 % We also try different prompts for generating unit test reward hacks.
 
 % We use two key metrics to compare the two branches:
@@ -20,9 +20,9 @@ and varying the model size affects the evaluation metrics.
 % and then motivating our experiments by saying that based on these observations, we wanted to see if we could improve these metrics.}
 % We are interested in learning how these metrics vary with the number of reward-hacked few-shot examples
 % (in-context learning), and with the size of the model used to generate the code completions.
-
-\subsection{Varying the Percentage of Reward-Hacked Examples} 
-This experiment explores in-context learning~\cite{brown2020languagemodelsfewshotlearners}\cite{liu2021pretrainpromptpredictsystematic},
+\begin{comment}
+% \subsection{Varying the Percentage of Reward-Hacked Examples} 
+As a proxy to full RL, we use in-context learning~\cite{brown2020languagemodelsfewshotlearners}\cite{liu2021pretrainpromptpredictsystematic},
 where models iteratively refine their approach based on updated input examples
 (rather than changing model parameters). 
 Here, we start with the same initial ``bank'' of few-shot examples, 
@@ -34,14 +34,12 @@ Thus,
 although we give the LLM a constant number of 10 few-shot examples throughout the experiment,
 later iterations have a higher percentage of reward-hacked few-shot examples in the prompt. 
 We hypothesized this would create a greater percentage of reward hacks (metric 2).
-
 \subsection{Varying Model Size} 
 In this experiment, we vary the model size from [insert]\etm{todo} to [insert]\etm{todo}, 
 keeping the model family and type constant.
 We hypothesized that an increased model size would increase the 
 percentage of reward-satisfying code completions (metric 1), since using a more model parameters
 should make it better able to adapt to Rust and Verus syntax.
-\begin{comment}
 \subsection{Varying Unit Test Prompt}
 Our default prompt for branch A gave the LLM all the unit tests it would be evaluated on, 
 but did not explicitly ask it to reward hack. 
@@ -95,7 +93,7 @@ a verified-but-wrong program, which the soundness of Verus rules out (modulo
 under-specification, which we did not observe in practice on these problems).
 \end{comment}
 
-\subsection{Overall Takeaways}
+\paragraph{Takeaways.}
 \et{This section might look different after we do our experiments}
 \begin{itemize}
 \item \textbf{Reward hacking is empirically much rarer with formal specifications.}

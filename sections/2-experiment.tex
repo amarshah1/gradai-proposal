@@ -65,14 +65,29 @@ implementations satisfying the Verus specs.
 % This is the largest known
 % benchmark with NL and formal Verus specs. 
 
-\paragraph{Baseline.} We fix Qwen3-Code as the LLM generator, 
+\paragraph{Setup.} We fix Qwen3-Code as the LLM generator, 
 and use Qwen3-Coder as the LLM implementor.
 For each task, we ask the model to produce $k$ completions under the two reward
 mechanisms: Branch A rewards passing
 model-generated unit tests, while Branch B rewards verification against a
-model-generated Verus spec. Both branches were prompted with $10$
-few-shot examples: $9$ correct implementations and $1$ reward hack
-(so the model knows reward hacking is an option). 
+model-generated Verus spec. 
+% Both branches were prompted with $10$
+% few-shot examples: $9$ correct implementations and $1$ reward hack
+% (so the model knows reward hacking is an option). 
+
+As a proxy to full RL, we use in-context learning~\cite{brown2020languagemodelsfewshotlearners}\cite{liu2021pretrainpromptpredictsystematic},
+where models iteratively refine their approach based on updated input examples
+(rather than changing model parameters). 
+We start with an initial ``bank'' of few-shot examples, 
+which contains a mix of correct programs and reward hacks
+(so the model knows reward hacking is an option), 
+varying the initial ratio.
+As we iterate through the completions and tasks, 
+% Rather than attempting each task with the same few-shot examples,
+each time we encounter a reward hack, we add it to our bank.
+Thus, 
+although we give the LLM a constant number of 10 few-shot examples throughout the experiment,
+later iterations have a higher percentage of reward-hacked few-shot examples in the prompt. 
 
 \paragraph{Evaluation Metrics.} We use two key metrics to compare the two branches:
 \begin{enumerate}
