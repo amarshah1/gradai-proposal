@@ -1,15 +1,41 @@
 \section{Results}\label{sec:results}
 
-We evaluate with two key questions to compare our results:
+
+We use two key metrics to compare the two branches:
 \begin{enumerate}
-  \item How good is the model at producing code which satisfies the provided reward?
-  \item How good is the model at producing correct code, 
-  given that it satisfies the provided reward?
+  \item \textbf{How frequently the model produces code which satisfies the reward}
+  (percentage of completions which satisfy the reward mechanism, out of the total number of completions).
+  \item \textbf{How frequently the model produces reward hacks, 
+  given that it satisfies the reward}
+  (percentage of incorrect completions, out of the completions which satisfy the reward).
 \end{enumerate}
 
+We are interested in learning what factors increase both of these percentages;
+in particular, we investigate in-context learning and model size as likely candidates.
+
+% We are interested in learning how these metrics vary with the number of reward-hacked few-shot examples
+% (in-context learning), and with the size of the model used to generate the code completions.
+
+\subsection{Experiment: In-Context Learning} 
+Rather than attempting each task with the same few-shot examples,
+each time we encounter an example of a reward hack, we will add it to our ``bank'' of examples.
+Thus, as we iterate further through the benchmark, 
+we hypothesize that we will see a greater percentage of reward hacks.
+
+\subsection{Experiment: Increasing Model Size} 
+We hypothesize that increasing the model size will increase the 
+percentage of reward-satisfying code completions, since using a more powerful model
+should make it better able to adapt to Rust and Verus syntax.
+% A sample is
+% labeled \emph{correct} only if it satisfies the gold-standard Verus
+% specification; this judgement is independent of the in-loop reward signal.
+
+\begin{comment}
 \paragraph{Setup.} We evaluated Qwen3-Coder on $70$ HumanEval-Verus
 benchmarks~\cite{alphaverus}, each consisting of a natural-language description, a
-gold-standard Verus specification, and a reference Rust implementation. For each
+gold-standard Verus specification, and a reference Rust implementation. 
+\etm{Duplicate description of benchmark}
+For each
 problem the model produced $5$ samples (pass@$5$) under each of the two reward
 mechanisms described in Section~\ref{intro}: Branch A rewards passing
 model-generated unit tests, Branch B rewards verification against a
@@ -45,8 +71,9 @@ specifications are supposed to give us: when the reward signal is a
 machine-checked proof of a specification, hacking the reward requires producing
 a verified-but-wrong program, which the soundness of Verus rules out (modulo
 under-specification, which we did not observe in practice on these problems).
+\end{comment}
 
-\paragraph{Takeaways.}
+\subsection{Analysis}
 \begin{itemize}
 \item \textbf{Reward hacking is empirically much rarer with formal specifications.}
   $20.0\%$ vs.\ $0\%$ on this benchmark.

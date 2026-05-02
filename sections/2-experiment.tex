@@ -56,10 +56,18 @@ we believe future RL training will amplify the results shown below.
 %     we would add a step between (3) and (4) which asks a model to add only proof annotations to the produced code,
 %     to help Verus see that the implementation does satisfy the specification.
 
-\textbf{Benchmark}: We use the HumanEval-Verus
+\paragraph{Benchmark.} We use the HumanEval-Verus
 dataset~\cite{alphaverus}, which has 78 coding tasks with
 NL descriptions, formal Verus specs, and Rust
 implementations satisfying the Verus specs. 
 This is the largest known
 benchmark with NL and formal Verus specs. 
 We leave other benchmarks to future work.
+
+\paragraph{Baseline Setup.} We use [X] as the LLM generator, and [Y] as the LLM implementor.
+For each problem, we ask the model to produce $k$ samples under each of the two reward
+mechanisms described in Section~\ref{intro}: Branch A rewards passing
+model-generated unit tests, Branch B rewards verification against a
+model-generated Verus specification. Both branches were prompted with $5$
+few-shot examples ($4$ correct implementations and $1$ deliberate reward hack,
+included so the model is aware reward hacking is on the table). 
