@@ -21,9 +21,9 @@
 
   % Two branches
   \node[genbox, below left=-.3cm and 1.2cm of gen]  (tests)
-    {Unit Tests};
+    {(A) Unit Tests};
   \node[genbox, below right=-.3cm and 1.2cm of gen] (spec)
-    {Generated Verus Spec};
+    {(B) Generated Verus Spec};
   \draw[arr] (gen) -- (tests);
   \draw[arr] (gen) -- (spec);
 

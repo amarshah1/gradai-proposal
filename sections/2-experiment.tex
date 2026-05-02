@@ -64,10 +64,10 @@ This is the largest known
 benchmark with NL and formal Verus specs. 
 We leave other benchmarks to future work.
 
-\paragraph{Baseline Setup.} We use [X] as the LLM generator, and [Y] as the LLM implementor.
-For each problem, we ask the model to produce $k$ samples under each of the two reward
-mechanisms described in Section~\ref{intro}: Branch A rewards passing
-model-generated unit tests, Branch B rewards verification against a
-model-generated Verus specification. Both branches were prompted with $5$
-few-shot examples ($4$ correct implementations and $1$ deliberate reward hack,
-included so the model is aware reward hacking is on the table). 
+\paragraph{Baseline Setup.} We fix Qwen3-Coder as the LLM generator, and use Qwen3-Coder as the LLM implementor.
+For each task, we ask the model to produce $k$ completions under the two reward
+mechanisms: Branch A rewards passing
+model-generated unit tests, while Branch B rewards verification against a
+model-generated Verus spec. Both branches were prompted with $5$
+few-shot examples ($4$ correct implementations and $1$ reward hack,
+so the model knows reward hacking is an option). 
