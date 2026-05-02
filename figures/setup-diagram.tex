@@ -50,10 +50,11 @@
 
   % Gold spec dashed arrow going around the right side
   \draw[arr, dashed, draw=orange!80!red!90!black, very thick] (bench.east)
-        -- ++(4.2,0)
+        -- ++(4.6,0)
         |- (eval.east)
         node[pos=0.25, right, font=\small\bfseries, text=orange!80!red!90!black]{gold spec};
 
 \end{tikzpicture}
-\caption{Experimental setup. Both branches receive only the natural language specification as input. The dashed arrow indicates the gold-standard Verus specification used solely for final evaluation.}
+\caption{Experimental design overview. Both branches receive the natural language description as input. 
+The dashed arrow indicates the gold-standard Verus spec used solely for final evaluation.}
 \label{fig:setup}

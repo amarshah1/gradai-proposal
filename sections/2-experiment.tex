@@ -1,4 +1,4 @@
-\section{Experimental Setup}
+\section{Experiment Overview}
 \label{results}
 
 \subsection{Verification Tool}
@@ -56,18 +56,29 @@ we believe future RL training will amplify the results shown below.
 %     we would add a step between (3) and (4) which asks a model to add only proof annotations to the produced code,
 %     to help Verus see that the implementation does satisfy the specification.
 
+\subsection{Experimental Setup}
+
 \paragraph{Benchmark.} We use the HumanEval-Verus
-dataset~\cite{alphaverus}, which has 78 coding tasks with
+dataset~\cite{alphaverus}, which contains 78 coding tasks with
 NL descriptions, formal Verus specs, and Rust
 implementations satisfying the Verus specs. 
-This is the largest known
-benchmark with NL and formal Verus specs. 
-We leave other benchmarks to future work.
+% This is the largest known
+% benchmark with NL and formal Verus specs. 
 
-\paragraph{Baseline Setup.} We fix Qwen3-Coder as the LLM generator, and use Qwen3-Coder as the LLM implementor.
+\paragraph{Baseline.} We fix [Qwen3-Coder]\etm{todo: instantiate with the generator we landed on} as the LLM generator, 
+and use [Qwen3-Coder]\etm{todo: instantiate with the implementor we landed on} as the LLM implementor.
 For each task, we ask the model to produce $k$ completions under the two reward
 mechanisms: Branch A rewards passing
 model-generated unit tests, while Branch B rewards verification against a
-model-generated Verus spec. Both branches were prompted with $5$
-few-shot examples ($4$ correct implementations and $1$ reward hack,
-so the model knows reward hacking is an option). 
+model-generated Verus spec. Both branches were prompted with $10$
+few-shot examples: $9$ correct implementations and $1$ reward hack
+(so the model knows reward hacking is an option). 
+
+\paragraph{Evaluation Metrics.} We use two key metrics to compare the two branches:
+\begin{enumerate}
+  \item \textbf{How frequently the model produces code which satisfies the reward}
+  (percentage of completions which satisfy the reward mechanism, out of the total number of completions).
+  \item \textbf{How frequently the model produces reward hacks, 
+  \emph{given that} it satisfies the reward}
+  (percentage of incorrect completions, out of the completions which satisfy the reward).
+\end{enumerate}

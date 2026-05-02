@@ -6,6 +6,7 @@ an agent exploits loopholes in the reward function to achieve high rewards
 without performing the intended task~\cite{rewardhacking}---is a fundamental challenge in reinforcement learning (RL)~\cite{baker2025monitoringreasoningmodelsmisbehavior}. 
 This phenomenon can lead to unintended consequences and suboptimal performance, posing a significant
 threat to the safety and reliability of AI systems~\cite{anthropicrh}. 
+% Additionally, the potential for reward hacking
 % Add back in?
 % This risk is becoming increasingly pertinent as
 % state-of-the-art AI models continue to be post-trained in RL environments. 
@@ -15,7 +16,8 @@ with unit tests as a popular metric for correctness.
 However, unit tests are fundamentally limited in their coverage: 
 they only check a finite subset of inputs. 
 This makes them susceptible to reward hacking, as prior work has shown~\cite{liu_2023}\cite{xin_2017}\cite{yuan2024manualtestsevaluatingimproving}.
-
+This is particularly inconvenient in the domain of self-play,
+where reward-hackable metrics can lead to error propagation rather than true learning~\cite{lin2026learningsolveverifyselfplay}.
 
 % Our work aims to investigate reward hacking in programming tasks, 
 % looking specifically at unit tests and \emph{formal specifications}
@@ -59,7 +61,11 @@ to ensuring correctness of a higher-level mathematical specification---an easier
 We investigate this question:
 \textbf{compared to unit tests, are formal specifications less susceptible to reward hacking?}
 We apply the same pipeline to unit tests and formal specs 
-and contrast the results.
+and contrast the results. 
+By doing so, we examine a key hypothesis in a recent self-play paper
+which used formal specs rather than unit tests~\cite{PSV}, 
+under the assumption that formal specs would act as more robust reward signals.
+
 % typically using a verification tool to ensure proof correctness.
 
 % Verus will then check if the code satisfies these requirements. 

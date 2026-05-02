@@ -22,10 +22,16 @@ Thus, they struggled to generate Verus code in multiple ways:
 \end{itemize}
 We illustrate the failure breakdown in Figure [insert], 
 which shows a more detailed analysis of Figure~\ref{fig:results-pass-at-k}(b).
+\etm{TODO}
 
 We plan to address this challenge by providing more few-shot examples,
 to help model correct Verus syntax,
-and by giving more specific instructions in our prompt.
+and by giving more specific instructions in our prompt. 
+% We plan to explore other benchmarks, such as Dafny2Verus~\cite{alphaverus} and MBPP-Verified~\cite{austin2021programsynthesislargelanguage}, in future work.
+\etm{Maybe rephrase now that we've tried more of this}
+We will also try other benchmarks
+(Dafny2Verus~\cite{alphaverus} and MBPP-Verified~\cite{austin2021programsynthesislargelanguage}), 
+to see if models found the HumanEval problems particularly hard.
 
 \subsection{Proving Correctness Against the Gold-Standard}
 

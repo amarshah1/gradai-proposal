@@ -1,36 +1,57 @@
 \section{Results}\label{sec:results}
 
+We investigate how varying the number of provided reward-hacked examples 
+and varying the model size affects the evaluation metrics. 
+We also try different prompts for generating unit test reward hacks.
 
-We use two key metrics to compare the two branches:
-\begin{enumerate}
-  \item \textbf{How frequently the model produces code which satisfies the reward}
-  (percentage of completions which satisfy the reward mechanism, out of the total number of completions).
-  \item \textbf{How frequently the model produces reward hacks, 
-  given that it satisfies the reward}
-  (percentage of incorrect completions, out of the completions which satisfy the reward).
-\end{enumerate}
+% We use two key metrics to compare the two branches:
+% \begin{enumerate}
+%   \item \textbf{How frequently the model produces code which satisfies the reward}
+%   (percentage of completions which satisfy the reward mechanism, out of the total number of completions).
+%   \item \textbf{How frequently the model produces reward hacks, 
+%   given that it satisfies the reward}
+%   (percentage of incorrect completions, out of the completions which satisfy the reward).
+% \end{enumerate}
 
-We are interested in learning what factors increase both of these percentages;
-in particular, we investigate in-context learning and model size as likely candidates.
+% We are interested in learning what factors increase both of these percentages;
+% in particular, we investigate in-context learning and model size as likely candidates.
 
-\et{I don't know if we have space for this but a natural story could be showing a pie chart with the baseline results 
-and then motivating our experiments by saying that based on these observations, we wanted to see if we could improve these metrics.}
+% \et{I don't know if we have space for this but a natural story could be showing a pie chart with the baseline results 
+% and then motivating our experiments by saying that based on these observations, we wanted to see if we could improve these metrics.}
 % We are interested in learning how these metrics vary with the number of reward-hacked few-shot examples
 % (in-context learning), and with the size of the model used to generate the code completions.
 
-\subsection{Experiment: In-Context Learning} 
-Rather than attempting each task with the same few-shot examples,
-each time we encounter an example of a reward hack, we will add it to our ``bank'' of examples.
-Thus, as we iterate further through the benchmark, 
-we hypothesize that we will see a greater percentage of reward hacks.
+\subsection{Varying the Percentage of Reward-Hacked Examples} 
+This experiment explores in-context learning~\cite{brown2020languagemodelsfewshotlearners}\cite{liu2021pretrainpromptpredictsystematic},
+where models iteratively refine their approach based on updated input examples
+(rather than changing model parameters). 
+Here, we start with the same initial ``bank'' of few-shot examples, 
+which contains 9 correct programs and 1 reward hack. 
+As we iterate through the completions and tasks, 
+% Rather than attempting each task with the same few-shot examples,
+each time we encounter a reward hack, we add it to our bank.
+Thus, 
+although we give the LLM a constant number of 10 few-shot examples throughout the experiment (pulling randomly from the bank),
+later iterations have a higher percentage of reward-hacked few-shot examples in the prompt. 
+We hypothesized this would create a greater percentage of reward hacks (metric 2).
 
-\subsection{Experiment: Increasing Model Size} 
-We hypothesize that increasing the model size will increase the 
-percentage of reward-satisfying code completions, since using a more powerful model
+\subsection{Varying Model Size} 
+In this experiment, we vary the model size from [insert]\etm{todo} to [insert]\etm{todo}, 
+keeping the model family and type constant.
+We hypothesized that an increased model size would increase the 
+percentage of reward-satisfying code completions (metric 1), since using a more model parameters
 should make it better able to adapt to Rust and Verus syntax.
-% A sample is
-% labeled \emph{correct} only if it satisfies the gold-standard Verus
-% specification; this judgement is independent of the in-loop reward signal.
+
+\subsection{Varying Unit Test Prompt}
+Our default prompt for branch A gave the LLM all the unit tests it would be evaluated on, 
+but did not explicitly ask it to reward hack. 
+We also tested variations where (1) we explicitly asked it to reward hack, but did \emph{not}
+give it any of the unit tests (taking inspiration from prior work~\cite{anthropicrh} on reward hacking),
+and (2) gave it only some of the unit tests, and evaluated it on a held-out set
+(without explicitly asking for a reward hack). 
+We hypothesized that we would see a comparable number of reward hacks in (1), 
+since the explicit instructions were offset by making it harder to reward hack;
+and fewer reward hacks in (2), since this was a strictly harder task.
 
 \begin{comment}
 \paragraph{Setup.} We evaluated Qwen3-Coder on $70$ HumanEval-Verus
@@ -75,7 +96,8 @@ a verified-but-wrong program, which the soundness of Verus rules out (modulo
 under-specification, which we did not observe in practice on these problems).
 \end{comment}
 
-\subsection{Analysis}
+\subsection{Overall Takeaways}
+\et{This section might look different after we do our experiments}
 \begin{itemize}
 \item \textbf{Reward hacking is empirically much rarer with formal specifications.}
   $20.0\%$ vs.\ $0\%$ on this benchmark.
@@ -89,4 +111,4 @@ under-specification, which we did not observe in practice on these problems).
   this trade-off further in Section~\ref{challenges}.
 \end{itemize}
 
-\as{Experiments that we want to run next: varying model, A1 vs A2, increasing few-shot, pass@k}
+% \as{Experiments that we want to run next: varying model, A1 vs A2, increasing few-shot, pass@k}
