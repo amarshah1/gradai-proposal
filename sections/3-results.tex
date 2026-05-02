@@ -2,7 +2,7 @@
 
 We investigate how varying the number of provided reward-hacked examples 
 and varying the model size affects the evaluation metrics. 
-We also try different prompts for generating unit test reward hacks.
+% We also try different prompts for generating unit test reward hacks.
 
 % We use two key metrics to compare the two branches:
 % \begin{enumerate}
@@ -31,7 +31,7 @@ As we iterate through the completions and tasks,
 % Rather than attempting each task with the same few-shot examples,
 each time we encounter a reward hack, we add it to our bank.
 Thus, 
-although we give the LLM a constant number of 10 few-shot examples throughout the experiment (pulling randomly from the bank),
+although we give the LLM a constant number of 10 few-shot examples throughout the experiment,
 later iterations have a higher percentage of reward-hacked few-shot examples in the prompt. 
 We hypothesized this would create a greater percentage of reward hacks (metric 2).
 
@@ -41,7 +41,7 @@ keeping the model family and type constant.
 We hypothesized that an increased model size would increase the 
 percentage of reward-satisfying code completions (metric 1), since using a more model parameters
 should make it better able to adapt to Rust and Verus syntax.
-
+\begin{comment}
 \subsection{Varying Unit Test Prompt}
 Our default prompt for branch A gave the LLM all the unit tests it would be evaluated on, 
 but did not explicitly ask it to reward hack. 
@@ -53,7 +53,6 @@ We hypothesized that we would see a comparable number of reward hacks in (1),
 since the explicit instructions were offset by making it harder to reward hack;
 and fewer reward hacks in (2), since this was a strictly harder task.
 
-\begin{comment}
 \paragraph{Setup.} We evaluated Qwen3-Coder on $70$ HumanEval-Verus
 benchmarks~\cite{alphaverus}, each consisting of a natural-language description, a
 gold-standard Verus specification, and a reference Rust implementation. 

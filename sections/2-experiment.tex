@@ -65,8 +65,8 @@ implementations satisfying the Verus specs.
 % This is the largest known
 % benchmark with NL and formal Verus specs. 
 
-\paragraph{Baseline.} We fix [Qwen3-Coder]\etm{todo: instantiate with the generator we landed on} as the LLM generator, 
-and use [Qwen3-Coder]\etm{todo: instantiate with the implementor we landed on} as the LLM implementor.
+\paragraph{Baseline.} We fix Qwen3-Code as the LLM generator, 
+and use Qwen3-Coder as the LLM implementor.
 For each task, we ask the model to produce $k$ completions under the two reward
 mechanisms: Branch A rewards passing
 model-generated unit tests, while Branch B rewards verification against a
