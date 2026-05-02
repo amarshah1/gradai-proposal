@@ -1,58 +1,58 @@
 \centering
 \tikzset{
   box/.style={rectangle, rounded corners=3pt, draw, align=center,
-              minimum width=2.6cm, minimum height=0.85cm, font=\normalsize},
+              minimum width=2.0cm, minimum height=0.65cm, font=\small},
   goldbox/.style={box, fill=yellow!50, draw=orange!90!black, very thick},
   genbox/.style={box, fill=blue!30, draw=blue!80!black, very thick},
   rlbox/.style={box, fill=green!20, draw=green!60!black, very thick},
   evalbox/.style={box, fill=red!30, draw=red!80!black, very thick},
-  arr/.style={-{Stealth[length=5pt]}, thick},
+  arr/.style={-{Stealth[length=4pt]}, thick},
 }
-\begin{tikzpicture}[node distance=0.4cm and 1.2cm]
+\begin{tikzpicture}[node distance=0.3cm and 1.0cm]
 
   % Top: benchmark input
-  \node[goldbox, minimum width=4.2cm] (bench)
-    {Benchmark\\{\small NL spec + gold Verus spec}};
+  \node[goldbox, minimum width=3.4cm] (bench)
+    {Benchmark\\{\footnotesize NL spec + gold Verus spec}};
 
   % NL spec fed to generator
-  \node[rlbox, below=of bench] (gen)
+  \node[rlbox, below=0.45cm of bench] (gen)
     {LLM Generator};
-  \draw[arr] (bench) -- node[right, font=\small]{NL spec} (gen);
+  \draw[arr] (bench) -- node[right, font=\footnotesize]{NL spec} (gen);
 
   % Two branches
-  \node[genbox, below left=-.3cm and 1.5cm of gen]  (tests)
+  \node[genbox, below left=-.3cm and 1.2cm of gen]  (tests)
     {Unit Tests};
-  \node[genbox, below right=-.3cm and 1.5cm of gen] (spec)
-    {Verus Spec\\{\small (generated)}};
+  \node[genbox, below right=-.3cm and 1.2cm of gen] (spec)
+    {Generated Verus Spec};
   \draw[arr] (gen) -- (tests);
   \draw[arr] (gen) -- (spec);
 
   % RL training nodes
-  \node[rlbox, below=0.45cm of tests] (rlA)
-    {LLM Implementor\\{\small goal: pass unit tests}};
-  \node[rlbox, below=0.45cm of spec]  (rlB)
-    {LLM Implementor\\{\small goal: satisfy Verus spec}};
+  \node[rlbox, below=0.35cm of tests] (rlA)
+    {LLM Implementor\\{\footnotesize goal: pass unit tests}};
+  \node[rlbox, below=0.35cm of spec]  (rlB)
+    {LLM Implementor\\{\footnotesize goal: satisfy Verus spec}};
   \draw[arr] (tests) -- (rlA);
   \draw[arr] (spec)  -- (rlB);
 
   % Code outputs
-  \node[box, below=0.45cm of rlA] (codeA) {Code A \\{\small goal: pass unit tests}};
-  \node[box, below=0.45cm of rlB] (codeB) {Code B \\{\small goal: satisfy Verus spec}};
+  \node[box, below=0.35cm of rlA] (codeA) {Code A};
+  \node[box, below=0.35cm of rlB] (codeB) {Code B};
   \draw[arr] (rlA) -- (codeA);
   \draw[arr] (rlB) -- (codeB);
 
   % Evaluation node
-  \node[evalbox, minimum width=4.2cm,
-        below=0.85cm of $(codeA)!0.5!(codeB)$] (eval)
-    {Evaluate \\{\small reward hacking $\Leftrightarrow$ gold Verus spec not satisfied}};
+  \node[evalbox, minimum width=3.4cm,
+        below=0.6cm of $(codeA)!0.5!(codeB)$] (eval)
+    {Evaluate \\{\footnotesize reward hacking $\Leftrightarrow$ gold Verus spec not satisfied}};
   \draw[arr] (codeA) -- (eval);
   \draw[arr] (codeB) -- (eval);
 
   % Gold spec dashed arrow going around the right side
   \draw[arr, dashed, draw=orange!80!red!90!black, very thick] (bench.east)
-        -- ++(5.0,0)
+        -- ++(4.2,0)
         |- (eval.east)
-        node[pos=0.25, right, font=\normalsize\bfseries, text=orange!80!red!90!black]{gold spec};
+        node[pos=0.25, right, font=\small\bfseries, text=orange!80!red!90!black]{gold spec};
 
 \end{tikzpicture}
 \caption{Experimental setup. Both branches receive only the natural language specification as input. The dashed arrow indicates the gold-standard Verus specification used solely for final evaluation.}
