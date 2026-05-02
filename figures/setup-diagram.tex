@@ -16,7 +16,7 @@
 
   % NL spec fed to generator
   \node[rlbox, below=of bench] (gen)
-    {LLM Generator\\{\small (given NL spec only)}};
+    {LLM Generator};
   \draw[arr] (bench) -- node[right, font=\small]{NL spec} (gen);
 
   % Two branches
@@ -29,15 +29,15 @@
 
   % RL training nodes
   \node[rlbox, below=0.9cm of tests] (rlA)
-    {LLM Implementor\\{\small goal: pass unit tests}};
+    {LLM Implementor};
   \node[rlbox, below=0.9cm of spec]  (rlB)
-    {LLM Implementor\\{\small goal: satisfy Verus spec}};
+    {LLM Implementor};
   \draw[arr] (tests) -- (rlA);
   \draw[arr] (spec)  -- (rlB);
 
   % Code outputs
-  \node[box, below=0.75cm of rlA] (codeA) {Code A};
-  \node[box, below=0.75cm of rlB] (codeB) {Code B};
+  \node[box, below=0.75cm of rlA] (codeA) {Code A \\{\small goal: pass unit tests}};
+  \node[box, below=0.75cm of rlB] (codeB) {Code B \\{\small goal: satisfy Verus spec}};
   \draw[arr] (rlA) -- (codeA);
   \draw[arr] (rlB) -- (codeB);
 
